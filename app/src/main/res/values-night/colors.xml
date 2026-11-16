@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ColorOS-style palette (dark), matching the system Settings app. -->
+<resources>
+    <color name="bg">#FF000000</color>
+    <color name="card">#FF1E1E1E</color>
+    <color name="text">#F2FFFFFF</color>
+    <color name="text_secondary">#8CFFFFFF</color>
+    <color name="section">#8CFFFFFF</color>
+    <color name="divider">#1AFFFFFF</color>
+    <color name="accent">#FF8293DB</color>
+    <color name="accent_soft">#298293DB</color>
+    <color name="ok">#FF4CD08A</color>
+    <color name="warn">#FFFFA05A</color>
+    <color name="track_off">#40FFFFFF</color>
+</resources>
