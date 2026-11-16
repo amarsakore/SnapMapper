@@ -199,7 +199,7 @@ follows. If no double-press action is set, single presses run instantly. Tune th
 
 SnapMapper asks for **no runtime permissions**. There's nothing to allow in a pop-up.
 
-| | |
+| Access | Used? |
 |---|---|
 | Internet | **No.** The app has no internet permission, so nothing can leave your phone. |
 | Storage, location, contacts, camera, mic | **No.** |
@@ -224,7 +224,7 @@ Settings and press history are stored only on the phone. The full source is in t
 
 **Lightweight:**
 
-| | |
+| What | Size |
 |---|---|
 | Download (APK) | **96 KB** (97,893 bytes) |
 | Installed size | **96 KB** app file (Android may add a little compiled code and cache) |
