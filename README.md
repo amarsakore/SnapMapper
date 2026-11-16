@@ -1,33 +1,57 @@
-# SnapMapper
+<h1 align="center">SnapMapper</h1>
 
-**Give the Snap Key on your OPPO phone a new job.** Single, double and long press, each with
-its own action. No root, no internet, no permissions to grant.
+<p align="center">
+  <b>Give the Snap Key on your OPPO phone a new job.</b><br>
+  Single, double and long press, each with its own action.
+</p>
+
+<p align="center">
+  <a href="../../releases/latest"><b>⬇ Download SnapMapper.apk (96 KB)</b></a>
+</p>
 
 <p align="center">
   <img src="docs/screenshot.png" width="320" alt="SnapMapper settings screen">
 </p>
 
-- **Open source**, MIT licensed.
-- **Tiny: 96 KB.** The whole app (APK) is 97,893 bytes.
-- **No extra battery use.** Nothing runs on a timer, it never polls, and it has no internet
-  access. It only does work when you press the Snap Key.
+- **No computer, no root, no Developer options.** Install it straight on the phone.
+- **Tiny: 96 KB.** The whole app is 97,893 bytes.
+- **No extra battery use.** No timers, no polling, no internet. It only does work when you
+  press the Snap Key.
 - **No permissions to grant.** The only thing you switch on is its accessibility service.
+- **Open source**, MIT licensed.
 
 ---
 
 ## Contents
 
+- [Quick start](#quick-start)
 - [What it can do](#what-it-can-do)
 - [Which phones](#which-phones)
-- [Install](#install)
+- [Install, step by step](#install-step-by-step)
 - [Choosing actions (read this: long press)](#choosing-actions)
 - [Permissions and privacy](#permissions-and-privacy)
 - [Size and battery](#size-and-battery)
+- [Troubleshooting](#troubleshooting)
+- [FAQ](#faq)
 - [How it works](#how-it-works)
 - [Limitations](#limitations)
 - [Uninstall](#uninstall)
 - [Build from source](#build-from-source)
 - [Credits and license](#credits-and-license)
+
+---
+
+## Quick start
+
+1. **Uninstall ColorOS Translate** if your phone has it.
+2. **Download** [`SnapMapper.apk`](../../releases/latest) on the phone.
+3. Open it from **My Files → Downloads** and choose **App Market (official)**, not "Package
+   installer". If it shows a security scan, tap **Install anyway**.
+4. Open SnapMapper and turn it on: **Accessibility → Downloaded apps → SnapMapper → On**.
+5. **Settings → Additional settings → Snap Key → Translate.**
+6. Press the Snap Key. Then pick your actions.
+
+Details for each step are [below](#install-step-by-step).
 
 ---
 
@@ -50,14 +74,14 @@ its own action. No root, no internet, no permissions to grant.
 **Smart behaviour**
 
 - **Different actions when locked.** Choose a separate set for when the screen is off or locked.
-- **Per-app actions.** Replace the single press while a chosen app is open, for example a
-  shutter or play/pause in a specific app.
+- **Per-app actions.** Replace the single press while a chosen app is open, for example
+  play/pause in your music app.
 - **Pause during calls.** The Snap Key is ignored while you're on a call.
 - **Feel the result.** Switching to vibrate gives one long strong buzz; switching to ring gives
   two short strong buzzes. You know what happened without looking.
 - **On-screen confirmation (optional).** A small pill around the front camera shows what ran.
   Its position can be fine-tuned in Advanced settings.
-- **Advanced settings.** Exact double-press window in milliseconds and a press history.
+- **Advanced settings.** Exact double-press window in milliseconds, and a press history.
 
 The settings screen follows the ColorOS look: large title, rounded cards, light and dark mode.
 
@@ -67,64 +91,74 @@ The settings screen follows the ColorOS look: large title, rounded cards, light 
 
 Tested on the **OPPO Find X9 Ultra** (CPH2841, ColorOS 17, Android 17).
 
-It should work on other OPPO / OnePlus phones with a Snap Key (also called the action button),
-**as long as the ColorOS Translate app (`com.coloros.translate`) can be removed or isn't
-installed**. See [How it works](#how-it-works) for why.
+It should also work on other OPPO / OnePlus phones with a Snap Key (also called the action
+button), **as long as the ColorOS Translate app can be uninstalled or isn't installed**.
+See [How it works](#how-it-works) for why. If you try it on another phone, please open an issue
+and say whether it worked.
 
 ---
 
-## Install
-
-You need a computer with [ADB](https://developer.android.com/tools/releases/platform-tools)
-**once**, for the install. After that you never need the computer or Developer options again.
+## Install, step by step
 
 ### 1. Remove ColorOS Translate (if you have it)
 
-SnapMapper takes the place of the ColorOS Translate app, so Translate can't be installed at
-the same time.
+SnapMapper takes the place of the ColorOS Translate app, so the two can't be installed at the
+same time.
 
-- Open **Settings → Apps → App management**, find **Translate**, and tap **Uninstall**.
-- If you don't see Translate, you don't have it. Skip this step.
-- If Translate is a system app that can't be uninstalled on your phone, SnapMapper can't be
-  installed there.
+- **Settings → Apps → App management**, find **Translate**, tap **Uninstall**.
+- Don't see Translate? Then you don't have it. Skip this step.
+- If Translate can't be uninstalled on your phone, SnapMapper can't be installed there.
 
-### 2. Turn on USB debugging (temporarily)
+### 2. Download the app
 
-1. **Settings → About device → Version**, tap **Build number** 7 times.
-2. **Settings → Additional settings → Developer options**, turn on **USB debugging**.
-3. Connect the phone to your computer and tap **Allow** on the phone.
+On the phone, open the [latest release](../../releases/latest) and download
+**`SnapMapper.apk`**.
 
-### 3. Install SnapMapper
+### 3. Install it with App Market
 
-Download `SnapMapper.apk` from the [latest release](../../releases/latest), then run:
+Open **My Files** (the ColorOS file manager that comes with your phone), go to **Downloads**,
+and tap **SnapMapper.apk**. When Android asks how to open it, choose **App Market (official)**:
+
+<p align="center">
+  <img src="docs/install-open-with.png" width="360" alt="Open with: App Market (official) or Package installer">
+</p>
+
+App Market scans the app. SnapMapper isn't from the App Market store, so it may show a warning.
+Tap **Install anyway**.
+
+> **Why App Market and not "Package installer"?** SnapMapper uses the package name
+> `com.coloros.translate` (see [How it works](#how-it-works)). ColorOS only lets apps with an
+> OPPO-style package name be installed by an app store. App Market is OPPO's store, so ColorOS
+> accepts it. "Package installer" fails with **"App not installed"**.
+
+### 4. Turn on SnapMapper
+
+1. Open **SnapMapper**. It shows what's left to set up.
+2. Tap **Turn on SnapMapper** → **Downloaded apps → SnapMapper → On**.
+3. If the switch is greyed out: **Settings → Apps → SnapMapper → ⋮ (top right) → Allow
+   restricted settings**, then try again.
+
+### 5. Point the Snap Key at SnapMapper
+
+**Settings → Additional settings → Snap Key → Translate.**
+
+SnapMapper now says **"Snap Key is ready"**. Press the Snap Key to try it (the default single
+press toggles the flashlight), then choose your actions.
+
+<details>
+<summary><b>Alternative: install with ADB from a computer</b></summary>
+
+If App Market isn't available, you can install once from a computer. This needs USB debugging
+(Developer options) only for the install; turn it off afterwards.
 
 ```bash
 adb install -i com.android.vending SnapMapper.apk
 ```
 
-> **Why `-i com.android.vending`?** ColorOS refuses to install apps that use an OPPO-style
-> package name (like `com.coloros.translate`) unless they come from an app store. This flag
-> tells Android the install comes from Google Play, which ColorOS accepts. Installing the APK by
-> tapping it in a file manager will fail with "app not installed" for this reason.
+`-i com.android.vending` marks the install as coming from Google Play, which ColorOS also
+accepts. Then continue with [step 4](#4-turn-on-snapmapper).
 
-### 4. Turn Developer options off again
-
-**Settings → Additional settings → Developer options**, switch it off. SnapMapper doesn't
-need it.
-
-### 5. Turn on SnapMapper
-
-1. Open **SnapMapper**.
-2. Tap **Turn on SnapMapper** → **Downloaded apps → SnapMapper → On**.
-3. If the switch is greyed out: **Settings → Apps → SnapMapper → ⋮ (top right) → Allow
-   restricted settings**, then try again. (Android does this for every app installed outside
-   an app store.)
-
-### 6. Point the Snap Key at SnapMapper
-
-**Settings → Additional settings → Snap Key → Translate.**
-
-SnapMapper shows **"Snap Key is ready"**. Press the Snap Key to try it, then pick your actions.
+</details>
 
 ---
 
@@ -137,9 +171,8 @@ On a **single or double press**, ColorOS sends SnapMapper a silent background me
 Nothing on screen changes.
 
 On a **long press**, ColorOS always opens a tiny invisible SnapMapper screen. This is how
-ColorOS handles long presses for the Translate slot, and SnapMapper can't change it. That
-screen closes instantly, but if the keyboard is open, it **briefly hides and reappears
-(flickers)**.
+ColorOS handles long presses for the Translate slot, and SnapMapper can't change it. The screen
+closes instantly, but if the keyboard is open, it **briefly hides and reappears (flickers)**.
 
 | Good for long press | Better on single / double press |
 |---|---|
@@ -154,8 +187,8 @@ screen closes instantly, but if the keyboard is open, it **briefly hides and rea
 the screen (ring/vibrate, flashlight, media), SnapMapper turns it straight back off, so you'll
 see at most a brief flash.
 
-Double press: SnapMapper waits a moment after the first press to see if a second one follows.
-If no double-press action is set, single presses run instantly. You can tune the wait under
+**Double press:** SnapMapper waits a moment after the first press to see if a second one
+follows. If no double-press action is set, single presses run instantly. Tune the wait under
 **Behaviour → Double press speed**, or set it exactly in **Advanced settings**.
 
 ---
@@ -168,19 +201,20 @@ SnapMapper asks for **no runtime permissions**. There's nothing to allow in a po
 |---|---|
 | Internet | **No.** The app has no internet permission, so nothing can leave your phone. |
 | Storage, location, contacts, camera, mic | **No.** |
-| Root | **No.** |
-| ADB / Developer options | **Only once, to install.** Not used at runtime. |
+| Root, ADB, Developer options | **No.** |
 | Vibration | Yes, for haptic feedback. Android grants it automatically. |
 | Accessibility service | **The one thing you switch on.** See below. |
 
 **What the accessibility service is used for:** only for things a normal app isn't allowed to
 do from the background: taking a screenshot, locking the screen, opening notifications, quick
 settings, recent apps or the power menu, opening apps while you're in another app, and showing
-the optional pill around the camera. It's configured to **not read screen content**
-(`canRetrieveWindowContent="false"`) and doesn't receive your key presses or typing. If you add
-per-app actions, it's told which app is in the foreground, and only then.
+the optional pill around the camera.
 
-Settings and press history are stored only on the phone.
+It's configured to **not read screen content** (`canRetrieveWindowContent="false"`), and it
+doesn't receive your key presses or typing. If you add per-app actions, it's told which app is
+in the foreground, and only then.
+
+Settings and press history are stored only on the phone. The full source is in this repository.
 
 ---
 
@@ -211,12 +245,64 @@ listed as Translate) should be at or near 0%.
 
 ---
 
+## Troubleshooting
+
+**"App not installed" when installing**
+You used "Package installer". Open the APK again from **My Files** and choose **App Market
+(official)**. If Translate is still installed, uninstall it first.
+
+**The accessibility switch is greyed out**
+Settings → Apps → SnapMapper → ⋮ → **Allow restricted settings**, then turn it on again.
+
+**Pressing the Snap Key does nothing**
+- The Snap Key must be set to **Translate** (Settings → Additional settings → Snap Key).
+- SnapMapper must be on in Accessibility. Open SnapMapper: the status card says what's missing.
+- Check the action isn't "Do nothing", and that "Pause during calls" isn't stopping it.
+- If ColorOS stopped SnapMapper after a restart, turn it off and on again in Accessibility.
+
+**The keyboard flickers on long press**
+Expected: see [Choosing actions](#choosing-actions). Move that action to single or double press.
+
+**The camera pill isn't centred on the camera**
+SnapMapper → Advanced settings → **Pill position**, then tap Up or Down (it previews live).
+
+**Single press feels slow**
+That's the double-press wait. Pick **Fast** under Behaviour → Double press speed, or set no
+double-press action so single presses run instantly.
+
+---
+
+## FAQ
+
+**Why does the Snap Key have to be on "Translate"?**
+That's the only Snap Key function that can be handed to a third-party app. See
+[How it works](#how-it-works).
+
+**Will the real Translate feature still work?**
+No. SnapMapper replaces the ColorOS Translate app. To get it back, uninstall SnapMapper and
+reinstall Translate from App Market.
+
+**Why does SnapMapper show up as "Translate" in some places?**
+In ColorOS menus that list the Snap Key function, it shows the function name (Translate). Your
+app drawer shows SnapMapper.
+
+**Does it work when the phone is locked or the screen is off?**
+Yes. You can even give it a separate set of actions for when it's locked.
+
+**Does it need to run all the time?**
+No. Nothing runs between presses; see [Size and battery](#size-and-battery).
+
+**Is it safe?**
+It has no internet permission and doesn't read your screen. The code is short and all here to
+read.
+
+---
+
 ## How it works
 
-ColorOS doesn't let normal apps see the Snap Key. The button
-(`BTN_TRIGGER_HAPPY32` on the `gpio-keys` input device) isn't mapped to an Android key code,
-so accessibility services and key listeners never receive it. ColorOS handles it inside the
-system instead:
+ColorOS doesn't let normal apps see the Snap Key. The button (`BTN_TRIGGER_HAPPY32` on the
+`gpio-keys` input device) isn't mapped to an Android key code, so accessibility services and
+key listeners never receive it. ColorOS handles it inside the system instead:
 
 1. The framework (`StrategyActionButtonKeyLaunchApp`) reads the raw key and turns it into
    internal events: **single tap** or **long press**.
@@ -224,20 +310,24 @@ system instead:
    **Settings → Snap Key**. Each function ("scene") is defined in its built-in
    `action_button_scene_config.xml`, which names an **owner package** and what to start.
 3. For **Translate**, the owner is `com.coloros.translate`, and:
-   - **single tap**: the gesture app binds to `com.coloros.translate/.ui.cube.KeyMessengerService`
-     and sends a Messenger message with `key = "SINGLE_TAP"`;
-   - **long press**: it starts the activity action `coloros.intent.action.translate.CUBE`
-     in that package, with `action_key_type = 2`.
+   - **single tap**: the gesture app binds to
+     `com.coloros.translate/.ui.cube.KeyMessengerService` and sends a Messenger message with
+     `key = "SINGLE_TAP"`;
+   - **long press**: it starts the activity action `coloros.intent.action.translate.CUBE` in
+     that package, with `action_key_type = 2`.
 
 SnapMapper uses the package name `com.coloros.translate` and provides exactly that service and
 activity, so ColorOS delivers every Snap Key press to it. SnapMapper only accepts messages sent
-by `com.oplus.gesture`. It then works out single / double / long press and runs your action.
+by `com.oplus.gesture`. It then works out single, double or long press and runs your action.
 
-Other routes that were tried and don't work without OPPO's signature or root:
-ColorOS's key interceptor API (`OplusKeyEventManager`) and the Snap Key scene database both
-require the signature-only permission `oplus.permission.OPLUS_COMPONENT_SAFE`. The hidden
-"test" Snap Key function (service-only long press) is removed from the list by ColorOS on every
-boot.
+**Installing:** ColorOS blocks installs of non-OPPO apps with OPPO-style package names, unless
+the installer is a trusted app store. Installing through OPPO's App Market (or Google Play via
+ADB) satisfies that check.
+
+**Routes that don't work** without OPPO's signature or root: ColorOS's key interceptor API
+(`OplusKeyEventManager`) and the Snap Key scene database both require the signature-only
+permission `oplus.permission.OPLUS_COMPONENT_SAFE`. The hidden "test" Snap Key function, whose
+long press would be silent, is removed from the list by ColorOS on every boot.
 
 ---
 
@@ -245,12 +335,10 @@ boot.
 
 - **Snap Key must stay on "Translate".** Any other function sends presses back to ColorOS.
 - **Long press flickers the keyboard** if it's open (see [Choosing actions](#choosing-actions)).
-- **If OPPO installs the real Translate app**, for example through a system update, it will
-  conflict with SnapMapper and the Snap Key will stop reaching it. Uninstall Translate again
-  and reinstall SnapMapper.
-- **A ColorOS update could change how the Snap Key works.** It works on the version above;
-  other versions are untested.
-- In ColorOS menus that list the Snap Key function, SnapMapper may appear as "Translate".
+- **If OPPO reinstalls Translate**, for example through a system update, it will conflict with
+  SnapMapper and the Snap Key will stop reaching it. Uninstall Translate again and reinstall
+  SnapMapper.
+- **A ColorOS update could change how the Snap Key works.** Tested on the version above.
 - Updates must be signed with the same key as the installed version. If you build it yourself,
   uninstall the release version first.
 
@@ -260,8 +348,9 @@ boot.
 
 1. **Settings → Apps → SnapMapper → Uninstall.**
 2. **Settings → Additional settings → Snap Key**: choose any other function.
+3. Optional: reinstall **Translate** from App Market.
 
-Nothing else was changed on your phone.
+Nothing else on your phone was changed.
 
 ---
 
@@ -275,10 +364,8 @@ cd SnapMapper
 ./gradlew assembleRelease
 ```
 
-The APK is written to `app/build/outputs/apk/release/app-release.apk`. Install it with the
-command from [step 3](#3-install-snapmapper).
-
-Project layout:
+The APK is written to `app/build/outputs/apk/release/app-release.apk`. Install it the same way
+as the release (App Market, or the ADB command).
 
 | File | What it does |
 |---|---|
@@ -288,6 +375,8 @@ Project layout:
 | `app/src/main/java/com/amar/snapmapper/KeyAction.kt` | All actions and their haptics |
 | `app/src/main/java/com/amar/snapmapper/MainActivity.kt` | The settings screen |
 | `app/src/main/java/com/amar/snapmapper/Prefs.kt` | Settings storage |
+
+Issues and pull requests are welcome.
 
 ---
 
