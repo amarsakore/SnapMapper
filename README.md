@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/icon.svg" width="112" alt="SnapMapper icon">
+</p>
+
 <h1 align="center">SnapMapper</h1>
 
 <p align="center">
@@ -61,15 +65,13 @@ Details for each step are [below](#install-step-by-step).
 
 **Actions**
 
-| | |
+| Category | Actions |
 |---|---|
-| Toggle flashlight | Switch ring / vibrate |
-| Cycle ring / vibrate / silent | Take screenshot |
-| Open camera / record video | Open any app |
-| Open a link | Play / pause, next, previous track |
-| Voice assistant | Notifications, quick settings, recent apps |
-| Home, back, lock screen, power menu | Split screen |
-| Start a timer | Web search |
+| **Quick toggles** | Flashlight · Switch ring / vibrate · Cycle ring / vibrate / silent |
+| **Capture** | Take screenshot · Open camera · Record video |
+| **Open** | Any app · A link · Voice assistant · Web search · Start a timer |
+| **Media** | Play / pause · Next track · Previous track |
+| **System** | Notifications · Quick settings · Recent apps · Home · Back · Lock screen · Power menu · Split screen |
 
 **Smart behaviour**
 

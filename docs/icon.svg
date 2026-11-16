@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108" width="108" height="108">
+  <!-- SnapMapper app icon (same as app/src/main/res/drawable/ic_launcher.xml) -->
+  <path fill="#1E1F24" d="M28,4h52a24,24 0 0 1 24,24v52a24,24 0 0 1 -24,24h-52a24,24 0 0 1 -24,-24v-52a24,24 0 0 1 24,-24z"/>
+  <g transform="translate(26 28) scale(0.7)">
+    <path fill="#7C8FD6" d="M2,35.5h16v4h-16z"/>
+    <path fill="#7C8FD6" d="M16,26L28,37.5L16,49z"/>
+    <path fill="#7C8FD6" d="M35,24a2,2 0 0 1 2,2v22a2,2 0 0 1 -4,0v-22a2,2 0 0 1 2,-2z"/>
+    <path fill="#7C8FD6" d="M43,10a8,8 0 0 1 8,-8h27v5h-27a3,3 0 0 0 -3,3v57.5a2.5,2.5 0 0 1 -5,0z"/>
+    <path fill="#5C6799" d="M51,10h24a3,3 0 0 1 3,3v54a3,3 0 0 1 -3,3h-24z"/>
+  </g>
+</svg>
