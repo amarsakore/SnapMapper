@@ -230,6 +230,12 @@ It's configured to **not read screen content** (`canRetrieveWindowContent="false
 doesn't receive your key presses or typing. If you add per-app actions, it's told which app is
 in the foreground, and only then.
 
+The service is declared as an **accessibility tool** (`isAccessibilityTool="true"`), the same
+category used by button remappers like Button Mapper. This tells Android it's a UI-control
+utility, not a screen reader, so the system (and some payment apps that otherwise block
+sideloaded accessibility apps) don't treat it as suspicious. SnapMapper has no internet
+permission, so even with accessibility on, nothing it sees can leave your phone.
+
 Settings and press history are stored only on the phone. The full source is in this repository.
 
 ---
