@@ -24,6 +24,12 @@
 - **No permissions to grant.** The only thing you switch on is its accessibility service.
 - **Open source**, MIT licensed.
 
+> [!IMPORTANT]
+> **Set your Snap Key to "Translate".** After installing, open
+> **Settings → Additional settings → Snap Key** and choose **Translate**. That's how ColorOS
+> hands the Snap Key to SnapMapper. If it's set to anything else, SnapMapper never receives
+> your presses.
+
 ---
 
 ## Contents
@@ -52,8 +58,9 @@
 3. Open it from **My Files → Downloads** and choose **App Market (official)**, not "Package
    installer". If it shows a security scan, tap **Install anyway**.
 4. Open SnapMapper and turn it on: **Accessibility → Downloaded apps → SnapMapper → On**.
-5. **Settings → Additional settings → Snap Key → Translate.**
-6. Press the Snap Key. Then pick your actions.
+5. **Set the Snap Key to Translate:** open **Settings → Additional settings → Snap Key** and
+   choose **Translate**. SnapMapper now receives the Snap Key in place of the Translate app.
+6. Press the Snap Key. Then pick your actions in SnapMapper.
 
 Details for each step are [below](#install-step-by-step).
 
@@ -140,9 +147,16 @@ Tap **Install anyway**.
 3. If the switch is greyed out: **Settings → Apps → SnapMapper → ⋮ (top right) → Allow
    restricted settings**, then try again.
 
-### 5. Point the Snap Key at SnapMapper
+### 5. Set the Snap Key to "Translate"
 
-**Settings → Additional settings → Snap Key → Translate.**
+This is the step that connects the Snap Key to SnapMapper:
+
+1. Open the phone's **Settings**.
+2. Go to **Additional settings → Snap Key**.
+3. Choose **Translate** from the list.
+
+ColorOS sends Translate's Snap Key presses to the app named `com.coloros.translate`, and that's
+now SnapMapper. (Translate no longer opens; SnapMapper runs your actions instead.)
 
 SnapMapper now says **"Snap Key is ready"**. Press the Snap Key to try it (the default single
 press toggles the flashlight), then choose your actions.
