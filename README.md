@@ -26,7 +26,7 @@
 
 > [!IMPORTANT]
 > **Set your Snap Key to "Translate".** After installing, open
-> **Settings → Additional settings → Snap Key** and choose **Translate**. That's how ColorOS
+> **Settings → Snap Key** and choose **Translate**. That's how ColorOS
 > hands the Snap Key to SnapMapper. If it's set to anything else, SnapMapper never receives
 > your presses.
 
