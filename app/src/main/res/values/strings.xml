@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SnapMapper</string>
-    <string name="service_label">SnapMapper</string>
-    <string name="service_description">Runs the actions you chose for the Snap Key: screenshots, lock screen, opening apps and the optional pill around the camera. It doesn\'t read screen content or your typing, and nothing leaves your phone.</string>
 </resources>

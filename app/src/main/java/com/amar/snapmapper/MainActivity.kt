@@ -2,8 +2,12 @@ package com.amar.snapmapper
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.AppOpsManager
+import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
@@ -29,7 +33,7 @@ import android.widget.TextView
  * One screen, styled like ColorOS Settings: large title, rounded cards, grouped rows.
  * Setup steps only show while something is missing; detailed controls hide behind Advanced.
  */
-class MainActivity : Activity(), SnapKeyService.Listener {
+class MainActivity : Activity() {
 
     private lateinit var prefs: Prefs
     private lateinit var content: LinearLayout
@@ -61,21 +65,11 @@ class MainActivity : Activity(), SnapKeyService.Listener {
 
     override fun onResume() {
         super.onResume()
-        SnapKeyService.listener = this
         render()
     }
 
-    override fun onPause() {
-        super.onPause()
-        if (SnapKeyService.listener === this) SnapKeyService.listener = null
-    }
-
-    override fun onServiceStateChanged() = runOnUiThread { render() }
-    override fun onGesture(g: Gesture, a: KeyAction) = render()
-
-    /** Settings changed: tell the service and redraw, keeping the scroll position. */
+    /** Settings changed: redraw, keeping the scroll position. */
     private fun changed() {
-        SnapKeyService.instance?.reconfigure()
         render()
     }
 
@@ -93,6 +87,11 @@ class MainActivity : Activity(), SnapKeyService.Listener {
         })
 
         content.addView(statusCard())
+
+        permissionsCard()?.let {
+            section("To finish your actions")
+            content.addView(it)
+        }
 
         // Everyday actions.
         section("Snap Key")
@@ -126,7 +125,7 @@ class MainActivity : Activity(), SnapKeyService.Listener {
                         prefs.vibrate = it
                     },
                     switchRow("On-screen confirmation", "A small pill around the camera shows what ran", prefs.showPopup) {
-                        prefs.showPopup = it
+                        prefs.showPopup = it; changed()
                     },
                     switchRow("Pause during calls", "Ignore the Snap Key while you're on a call", prefs.pauseInCalls) {
                         prefs.pauseInCalls = it
@@ -172,14 +171,6 @@ class MainActivity : Activity(), SnapKeyService.Listener {
 
     // ---- Status / setup ----
 
-    private fun listenerOn(): Boolean {
-        val enabled = Settings.Secure.getString(contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
-            ?: return false
-        val me = ComponentName(this, SnapKeyService::class.java)
-        return enabled.split(':').any { ComponentName.unflattenFromString(it) == me } &&
-            SnapKeyService.instance != null
-    }
-
     private fun snapKeyOnTranslate(): Boolean = try {
         Settings.System.getString(contentResolver, "oplus_action_button_switch_state") == "translate"
     } catch (e: Exception) {
@@ -187,35 +178,81 @@ class MainActivity : Activity(), SnapKeyService.Listener {
     }
 
     private fun statusCard(): View {
-        val listener = listenerOn()
         val translate = snapKeyOnTranslate()
-        val ready = listener && translate
-
         val rows = mutableListOf<View>()
-        val last = SnapKeyService.lastSnapPressAt
+        val last = PressEngine.lastPressAt
         rows += heroRow(
-            ready = ready,
-            title = if (ready) "Snap Key is ready" else "Finish setup",
+            ready = translate,
+            title = if (translate) "Snap Key is ready" else "One step left",
             summary = when {
-                !ready -> "SnapMapper needs these steps to receive the Snap Key."
+                !translate -> "Set the Snap Key to \"Translate\" so it reaches SnapMapper."
                 last == 0L -> "Press the Snap Key to try it."
                 else -> "Last press ${DateUtils.getRelativeTimeSpanString(last)}"
             },
         )
-        if (!listener) {
-            rows += stepRow(
-                "1", "Turn on SnapMapper",
-                "Tap here, then Downloaded apps → SnapMapper → On",
-            ) { startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)) }
-        }
         if (!translate) {
             rows += stepRow(
-                if (listener) "1" else "2", "Set the Snap Key to \"Translate\"",
-                "Open Settings → Additional settings → Snap Key, then choose Translate",
+                "1", "Set the Snap Key to \"Translate\"",
+                "Settings → Additional settings → Snap Key → Translate",
                 onClick = null,
             )
         }
         return card(rows)
+    }
+
+    // ---- Capability prompts (only shown when an action you chose needs one) ----
+
+    /** Every action set anywhere (normal, locked, per-app). */
+    private fun allActions(): Set<KeyAction> = buildSet {
+        for (g in Gesture.entries) {
+            add(prefs.action(g))
+            if (prefs.lockedActionsEnabled) add(prefs.action(g, Scope.LOCKED))
+        }
+        prefs.appRules.forEach { add(prefs.action(Gesture.SINGLE, Scope.app(it))) }
+    }
+
+    private fun lockAdmin() = ComponentName(this, LockAdminReceiver::class.java)
+    private fun isLockAdmin() = getSystemService(DevicePolicyManager::class.java).isAdminActive(lockAdmin())
+    private fun hasUsageAccess(): Boolean {
+        val ops = getSystemService(AppOpsManager::class.java)
+        val mode = ops.unsafeCheckOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, android.os.Process.myUid(), packageName)
+        return mode == AppOpsManager.MODE_ALLOWED
+    }
+
+    private fun permissionsCard(): View? {
+        val actions = allActions()
+        val rows = mutableListOf<View>()
+
+        if (KeyAction.SCREENSHOT in actions && !CaptureService.armed) {
+            rows += stepRow("!", "Set up screenshot", "One-time screen-capture permission. No accessibility needed.") {
+                ProjectionActivity.request(this, capture = false)
+            }
+        }
+        if (CaptureService.armed) {
+            rows += row("Screenshot is armed", "Turn off to remove the notification") {
+                CaptureService.stop(this); render()
+            }
+        }
+        if (KeyAction.LOCK_SCREEN in actions && !isLockAdmin()) {
+            rows += stepRow("!", "Allow \"Lock screen\"", "Grant device admin so the key can lock the phone") {
+                val i = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
+                    .putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, lockAdmin())
+                    .putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+                        "SnapMapper uses this only to lock the screen from the Snap Key.")
+                startActivity(i)
+            }
+        }
+        if (prefs.showPopup && !Settings.canDrawOverlays(this)) {
+            rows += stepRow("!", "Allow the camera pill", "\"Display over other apps\", for the on-screen confirmation") {
+                startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")))
+            }
+        }
+        if (prefs.appRules.isNotEmpty() && !hasUsageAccess()) {
+            rows += stepRow("!", "Allow per-app actions", "\"Usage access\", so SnapMapper knows which app is open") {
+                startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
+            }
+        }
+        return if (rows.isEmpty()) null else card(rows)
     }
 
     private fun heroRow(ready: Boolean, title: String, summary: String): View {
@@ -405,12 +442,12 @@ class MainActivity : Activity(), SnapKeyService.Listener {
 
     /** Nudge the pill up/down with a live preview around the camera. */
     private fun adjustIsland() {
-        val svc = SnapKeyService.instance
+        val canShow = Settings.canDrawOverlays(this)
         val value = text("", 16f, color(R.color.text)).apply { gravity = Gravity.CENTER }
         fun show() {
             val off = prefs.islandOffsetDp
             value.text = "${if (off > 0) "+" else ""}$off dp"
-            svc?.previewIsland()
+            if (canShow) PressEngine.previewIsland(this)
         }
         fun stepButton(label: String, delta: Int) = TextView(this).apply {
             text = label
@@ -436,10 +473,10 @@ class MainActivity : Activity(), SnapKeyService.Listener {
         }
         AlertDialog.Builder(this)
             .setTitle("Pill position")
-            .setMessage(if (svc == null) "Turn on SnapMapper first to see the preview." else "Tap Up or Down until the pill sits evenly around the camera.")
+            .setMessage(if (!canShow) "Allow \"Display over other apps\" first to see the pill." else "Tap Up or Down until the pill sits evenly around the camera.")
             .setView(rowView)
             .setPositiveButton("Done") { _, _ -> render() }
-            .setNeutralButton("Reset") { _, _ -> prefs.islandOffsetDp = 0; svc?.previewIsland(); render() }
+            .setNeutralButton("Reset") { _, _ -> prefs.islandOffsetDp = 0; if (canShow) PressEngine.previewIsland(this); render() }
             .show()
         show()
     }

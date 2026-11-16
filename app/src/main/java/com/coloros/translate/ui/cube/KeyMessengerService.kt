@@ -8,7 +8,7 @@ import android.os.Looper
 import android.os.Message
 import android.os.Messenger
 import android.util.Log
-import com.amar.snapmapper.SnapKeyService
+import com.amar.snapmapper.PressEngine
 
 /**
  * Snap Key presses straight from ColorOS, with no ADB, root or Developer options.
@@ -31,8 +31,8 @@ open class KeyMessengerService : Service() {
             val key = msg.data?.getString("key")
             Log.i(TAG, "Snap Key message what=${msg.what} key=$key")
             when {
-                key == "LONG_PRESS" || (key == null && msg.what == 2) -> SnapKeyService.snapLongPress(this@KeyMessengerService)
-                key == "SINGLE_TAP" || (key == null && msg.what == 1) -> SnapKeyService.snapTap(this@KeyMessengerService)
+                key == "LONG_PRESS" || (key == null && msg.what == 2) -> PressEngine.onLong(this@KeyMessengerService)
+                key == "SINGLE_TAP" || (key == null && msg.what == 1) -> PressEngine.onTap(this@KeyMessengerService)
             }
         }
     }
