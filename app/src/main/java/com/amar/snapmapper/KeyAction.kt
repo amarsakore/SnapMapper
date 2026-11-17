@@ -44,6 +44,7 @@ enum class KeyAction(val label: String) {
     HOME("Go home"),
     TIMER("Start a timer"),
     WEB_SEARCH("Web search"),
+    CIRCLE_TO_SEARCH("Circle to Search"),
 }
 
 /**
@@ -99,6 +100,7 @@ class ActionRunner(private val appContext: Context) {
                 KeyAction.HOME -> start(launch, Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME))
                 KeyAction.TIMER -> start(launch, Intent(AlarmClock.ACTION_SET_TIMER).putExtra(AlarmClock.EXTRA_SKIP_UI, false))
                 KeyAction.WEB_SEARCH -> start(launch, Intent(Intent.ACTION_WEB_SEARCH).putExtra(SearchManager.QUERY, ""))
+                KeyAction.CIRCLE_TO_SEARCH -> start(launch, Intent(appContext, CircleToSearchActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION))
             }
         } catch (e: Exception) {
             toast("${action.label} failed: ${e.message}")

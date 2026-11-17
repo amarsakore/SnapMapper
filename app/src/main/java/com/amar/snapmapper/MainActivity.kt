@@ -242,8 +242,11 @@ class MainActivity : Activity() {
                 startActivity(i)
             }
         }
-        if (prefs.showPopup && !Settings.canDrawOverlays(this)) {
-            rows += stepRow("!", "Allow the camera pill", "\"Display over other apps\", for the on-screen confirmation") {
+        // Also what lets presses open apps and Circle to Search while another app is in front:
+        // Android blocks background activity starts unless the app holds this permission.
+        if (!Settings.canDrawOverlays(this)) {
+            rows += stepRow("!", "Allow opening from any screen",
+                "\"Display over other apps\", so the Snap Key can open apps and Circle to Search over other apps, and show the camera pill") {
                 startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")))
             }
         }

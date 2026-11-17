@@ -29,7 +29,8 @@ import java.util.Date
  *
  * This is a plain singleton — **no accessibility service**. Presses arrive from ColorOS through
  * [com.coloros.translate.ui.cube.KeyMessengerService] (single tap) and
- * [com.coloros.translate.ui.cube.LongPressActivity] (long press), which both call in here.
+ * [com.coloros.translate.ui.cube.LongPressActivity] or [com.coloros.translate.ui.cube.LongPressService]
+ * (long press, depending on the gesture app version), which all call in here.
  */
 object PressEngine {
 
@@ -135,7 +136,8 @@ object PressEngine {
         if (p.vibrate && !ownHaptics) tick(ctx)
 
         val result = r.run(action, g, p, scope, launch)
-        if (p.showPopup && screenOn && action != KeyAction.FLASHLIGHT) popup(ctx, result)
+        // Circle to Search would capture the pill, so it gets none.
+        if (p.showPopup && screenOn && action != KeyAction.FLASHLIGHT && action != KeyAction.CIRCLE_TO_SEARCH) popup(ctx, result)
         history(p, g, result, where)
     }
 

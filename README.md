@@ -69,7 +69,7 @@ That's it — no accessibility, no computer.
 |---|---|
 | **Quick toggles** | Flashlight · Switch ring / vibrate · Cycle ring / vibrate / silent |
 | **Capture** | Take screenshot · Open camera · Record video |
-| **Open** | Any app · A link · Voice assistant · Web search · Start a timer · Go home |
+| **Open** | Any app · A link · Voice assistant · Web search · Circle to Search · Start a timer · Go home |
 | **Media** | Play / pause · Next track · Previous track |
 | **System** | Lock screen |
 
@@ -162,12 +162,15 @@ open it **briefly flickers**.
 | Open camera / record video | Switch ring / vibrate |
 | Open an app or a link | Cycle ring / vibrate / silent |
 | Take screenshot | Toggle flashlight |
-| Voice assistant, web search, timer | Play / pause, next / previous track |
+| Voice assistant, web search, timer, Circle to Search | Play / pause, next / previous track |
 | Lock screen, go home | Anything you use while typing |
 
-Opening apps, the camera and links is most reliable on **long press** — a long press runs from a
-real foreground screen, while a single tap runs from the background, which Android sometimes
-won't let launch another app.
+Opening apps, the camera, links and Circle to Search from a press needs **Display over other
+apps**: presses arrive in the background, and Android blocks background apps from opening a
+screen unless they hold that permission. SnapMapper's setup card asks for it.
+
+**Circle to Search** opens in about half a second through Android's own call, with the phone
+unlocked. It works on single and long press on the OPPO Find X9 (CPH2797, ColorOS 17).
 
 ---
 
@@ -181,7 +184,7 @@ does can leave your phone. You only grant a permission for the specific action t
 | Vibration | always | Haptic feedback (granted automatically) |
 | Screen capture | if you use **Screenshot** | Take the screenshot, via the system capture API |
 | Notifications | with screenshot | The ongoing "screenshot armed" notice |
-| Display over other apps | if you turn on the **camera pill** | Draw the little confirmation pill |
+| Display over other apps | to open apps, links, the camera or **Circle to Search** from a press, and for the **camera pill** | Android only lets a background app open a screen with this; also draws the confirmation pill |
 | Usage access | if you add **per-app actions** | Read only which app is in front |
 | Device admin (lock) | if you use **Lock screen** | Call the system lock; nothing else |
 
@@ -206,8 +209,9 @@ once to re-arm. After a reboot you set it up again.
 **The keyboard flickers on long press** — expected; see [Choosing actions](#choosing-actions).
 Move that action to single or double press.
 
-**Opening an app on single press does nothing** — Android blocks background app launches; put
-"open app" on long press instead.
+**Opening an app or Circle to Search does nothing unless SnapMapper is on screen** — Android
+blocks background app launches. Allow **Display over other apps** for SnapMapper (its setup card
+links to it).
 
 ---
 
@@ -217,7 +221,9 @@ ColorOS doesn't let normal apps see the Snap Key directly — the button isn't m
 Android key code. Instead ColorOS runs whatever function you pick in **Settings → Snap Key**,
 and each function names an **owner app**. For **Translate**, the owner is `com.coloros.translate`:
 on a tap ColorOS sends a message to `com.coloros.translate/.ui.cube.KeyMessengerService`, and on
-a long press it starts an activity in that package.
+a long press it starts an activity in that package. Some versions of ColorOS's gesture app (8.6.0
+on the Find X9) start a foreground service with action `oplus.intent.action.GLOBAL_TRANSLATION`
+on a long press instead; SnapMapper provides both.
 
 SnapMapper uses the package name `com.coloros.translate` and provides exactly that service and
 activity, so ColorOS delivers every Snap Key press to it. It accepts presses only from
@@ -272,6 +278,8 @@ release (App Market).
 |---|---|
 | `…/coloros/translate/ui/cube/KeyMessengerService.kt` | Receives single taps from ColorOS |
 | `…/coloros/translate/ui/cube/LongPressActivity.kt` | Receives long presses |
+| `…/coloros/translate/ui/cube/LongPressService.kt` | Receives long presses on phones that start a service |
+| `…/amar/snapmapper/CircleToSearchActivity.kt` | Opens Circle to Search |
 | `…/amar/snapmapper/PressEngine.kt` | Gesture detection + runs actions + the camera pill |
 | `…/amar/snapmapper/KeyAction.kt` | All actions and their haptics |
 | `…/amar/snapmapper/CaptureService.kt` | Screenshots via MediaProjection |

@@ -70,6 +70,25 @@
             android:name="com.coloros.translate.ui.cube.KeyMessengerService"
             android:exported="true" />
 
+        <!-- Some gesture app versions (8.6.0 on the Find X9) start this service on a long press... -->
+        <service
+            android:name="com.coloros.translate.ui.cube.LongPressService"
+            android:exported="true"
+            android:foregroundServiceType="shortService">
+            <intent-filter>
+                <action android:name="oplus.intent.action.GLOBAL_TRANSLATION" />
+            </intent-filter>
+        </service>
+
+        <!-- ...and others start this activity. See-through; in front only for an instant. -->
+        <activity
+            android:name=".CircleToSearchActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <!-- ColorOS starts this action on a long press of the Snap Key. -->
         <activity
             android:name="com.coloros.translate.ui.cube.LongPressActivity"
